@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abogado de Barrio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0e0e0e;
+    --crema: #f5f0e8;
+    --dorado: #c9a84c;
+    --dorado-claro: #e8c96a;
+    --gris: #2a2a2a;
+    --gris-medio: #444;
+    --gris-claro: #888;
+    --borde: #2e2e2e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--negro);
+    color: var(--crema);
+    font-family: 'DM Sans', sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--borde);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #111;
+    flex-shrink: 0;
+  }
+
+  .logo-icon {
+    width: 42px;
+    height: 42px;
+    background: var(--dorado);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .logo-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--crema);
+    line-height: 1.1;
+  }
+
+  .logo-text span {
+    font-size: 11px;
+    color: var(--gris-claro);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  .badge {
+    margin-left: auto;
+    background: rgba(201, 168, 76, 0.12);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    color: var(--dorado);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .temas {
+    padding: 12px 20px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--borde);
+    flex-shrink: 0;
+    scrollbar-width: none;
+  }
+  .temas::-webkit-scrollbar { display: none; }
+
+  .tema-btn {
+    background: var(--gris);
+    border: 1px solid var(--borde);
+    color: var(--crema);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .tema-btn:hover {
+    background: var(--dorado);
+    color: var(--negro);
+    border-color: var(--dorado);
+  }
+
+  .chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gris) transparent;
+  }
+
+  .bienvenida {
+    text-align: center;
+    padding: 30px 20px;
+    animation: fadeIn 0.6s ease;
+  }
+
+  .bienvenida .icono-grande { font-size: 48px; margin-bottom: 16px; }
+
+  .bienvenida h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--crema);
+  }
+
+  .bienvenida h2 span { color: var(--dorado); }
+
+  .bienvenida p {
+    color: var(--gris-claro);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 340px;
+    margin: 0 auto 20px;
+  }
+
+  .ejemplos {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .ejemplo-card {
+    background: var(--gris);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .ejemplo-card:hover {
+    border-color: var(--dorado);
+    background: rgba(201, 168, 76, 0.08);
+  }
+  .ejemplo-card .etiqueta {
+    font-size: 10px;
+    color: var(--dorado);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .ejemplo-card p { font-size: 13px; color: var(--crema); margin: 0; }
+
+  .mensaje {
+    display: flex;
+    gap: 10px;
+    animation: slideUp 0.3s ease;
+    max-width: 100%;
+  }
+
+  .mensaje.usuario { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .avatar.ia {
+    background: var(--dorado);
+    color: var(--negro);
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .avatar.user {
+    background: var(--gris);
+    border: 1px solid var(--borde);
+  }
+
+  .burbuja {
+    max-width: calc(100% - 50px);
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .mensaje.ia .burbuja {
+    background: var(--gris);
+    border: 1px solid var(--borde);
+    border-top-left-radius: 4px;
+    color: var(--crema);
+  }
+
+  .mensaje.usuario .burbuja {
+    background: var(--dorado);
+    color: var(--negro);
+    border-top-right-radius: 4px;
+    font-weight: 500;
+  }
+
+  .typing {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 16px;
+  }
+  .typing span {
+    width: 7px;
+    height: 7px;
+    background: var(--dorado);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+  .input-area {
+    padding: 16px 20px;
+    border-top: 1px solid var(--borde);
+    background: #111;
+    flex-shrink: 0;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  textarea {
+    flex: 1;
+    background: var(--gris);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: 12px 16px;
+    color: var(--crema);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    resize: none;
+    max-height: 100px;
+    min-height: 46px;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+  }
+  textarea:focus { border-color: var(--dorado); }
+  textarea::placeholder { color: var(--gris-claro); }
+
+  .send-btn {
+    width: 46px;
+    height: 46px;
+    background: var(--dorado);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .send-btn:hover { background: var(--dorado-claro); transform: scale(1.05); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .send-btn svg { width: 18px; height: 18px; fill: var(--negro); }
+
+  .aviso-legal {
+    text-align: center;
+    font-size: 10px;
+    color: #555;
+    margin-top: 8px;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">⚖️</div>
+  <div class="logo-text">
+    <h1>Abogado de Barrio</h1>
+    <span>Consultas legales para Argentina</span>
+  </div>
+  <div class="badge">🟢 En línea</div>
+</header>
+
+<div class="temas">
+  <button class="tema-btn" onclick="usarTema('Inquilino')">🏠 Alquileres</button>
+  <button class="tema-btn" onclick="usarTema('Laboral')">💼 Trabajo</button>
+  <button class="tema-btn" onclick="usarTema('Consumidor')">🛒 Defensa del consumidor</button>
+  <button class="tema-btn" onclick="usarTema('Familiar')">👨‍👩‍👧 Familia</button>
+  <button class="tema-btn" onclick="usarTema('Multas')">🚗 Multas y tránsito</button>
+  <button class="tema-btn" onclick="usarTema('Deudas')">💳 Deudas</button>
+</div>
+
+<div class="chat-container" id="chat">
+  <div class="bienvenida" id="bienvenida">
+    <div class="icono-grande">⚖️</div>
+    <h2>Tu consulta legal,<br><span>explicada simple</span></h2>
+    <p>Contame tu situación en tus palabras. Te explico qué dice la ley argentina y qué podés hacer.</p>
+    <div class="ejemplos">
+      <div class="ejemplo-card" onclick="enviarEjemplo('Mi casero no me quiere devolver el depósito del alquiler. Ya me fui hace 2 meses.')">
+        <div class="etiqueta">🏠 Alquiler</div>
+        <p>Mi casero no me devuelve el depósito hace 2 meses</p>
+      </div>
+      <div class="ejemplo-card" onclick="enviarEjemplo('Me echaron del trabajo sin causa. Trabajé 3 años en la empresa. ¿Qué me corresponde?')">
+        <div class="etiqueta">💼 Laboral</div>
+        <p>Me despidieron sin causa después de 3 años</p>
+      </div>
+      <div class="ejemplo-card" onclick="enviarEjemplo('Compré un celular y llegó roto. La tienda no me quiere cambiar ni devolver la plata.')">
+        <div class="etiqueta">🛒 Consumidor</div>
+        <p>Compré algo defectuoso y no me lo quieren cambiar</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="input-area">
+  <div class="input-row">
+    <textarea id="input" placeholder="Contame tu situación..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="enviar()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+      </svg>
+    </button>
+  </div>
+  <div class="aviso-legal">⚠️ Información legal orientativa. No reemplaza el asesoramiento de un abogado matriculado.</div>
+</div>
+
+<script>
+  let historial = [];
+  let esperando = false;
+
+  function ocultarBienvenida() {
+    const b = document.getElementById('bienvenida');
+    if (b) b.remove();
+  }
+
+  function agregarMensaje(rol, texto) {
+    const chat = document.getElementById('chat');
+    const div = document.createElement('div');
+    div.className = `mensaje ${rol === 'user' ? 'usuario' : 'ia'}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = `avatar ${rol === 'user' ? 'user' : 'ia'}`;
+    avatar.textContent = rol === 'user' ? '👤' : 'A';
+
+    const burbuja = document.createElement('div');
+    burbuja.className = 'burbuja';
+    burbuja.innerHTML = texto.replace(/\n/g, '<br>');
+
+    div.appendChild(avatar);
+    div.appendChild(burbuja);
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function mostrarTyping() {
+    const chat = document.getElementById('chat');
+    const div = document.createElement('div');
+    div.className = 'mensaje ia';
+    div.id = 'typing-indicator';
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar ia';
+    avatar.textContent = 'A';
+
+    const burbuja = document.createElement('div');
+    burbuja.className = 'burbuja';
+    burbuja.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+
+    div.appendChild(avatar);
+    div.appendChild(burbuja);
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function quitarTyping() {
+    const t = document.getElementById('typing-indicator');
+    if (t) t.remove();
+  }
+
+  async function enviarMensaje(texto) {
+    if (esperando || !texto.trim()) return;
+    esperando = true;
+
+    ocultarBienvenida();
+    agregarMensaje('user', texto);
+    historial.push({ role: 'user', content: texto });
+
+    document.getElementById('sendBtn').disabled = true;
+    mostrarTyping();
+
+    try {
+      // ← Ahora llama a TU servidor en Vercel, no a Anthropic directamente
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: historial })
+      });
+
+      const data = await response.json();
+      quitarTyping();
+
+      if (data.error) {
+        agregarMensaje('assistant', '❌ Error: ' + data.error);
+      } else {
+        historial.push({ role: 'assistant', content: data.respuesta });
+        agregarMensaje('assistant', data.respuesta);
+      }
+
+    } catch (err) {
+      quitarTyping();
+      agregarMensaje('assistant', '❌ Hubo un problema de conexión. Intentá de nuevo.');
+    }
+
+    esperando = false;
+    document.getElementById('sendBtn').disabled = false;
+  }
+
+  function enviar() {
+    const input = document.getElementById('input');
+    const texto = input.value.trim();
+    if (!texto) return;
+    input.value = '';
+    input.style.height = 'auto';
+    enviarMensaje(texto);
+  }
+
+  function enviarEjemplo(texto) { enviarMensaje(texto); }
+
+  function usarTema(tema) {
+    const preguntas = {
+      'Inquilino': 'Tengo una consulta sobre alquiler en Argentina',
+      'Laboral': 'Tengo una consulta sobre mis derechos laborales',
+      'Consumidor': 'Tengo una consulta sobre defensa del consumidor',
+      'Familiar': 'Tengo una consulta sobre derecho de familia',
+      'Multas': 'Tengo una consulta sobre una multa de tránsito',
+      'Deudas': 'Tengo una consulta sobre deudas y acreedores'
+    };
+    document.getElementById('input').value = preguntas[tema] || `Consulta sobre ${tema}`;
+    document.getElementById('input').focus();
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      enviar();
+    }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+  }
+</script>
+</body>
+</html>
