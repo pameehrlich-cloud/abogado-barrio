@@ -36,9 +36,16 @@ REGLAS IMPORTANTES:
     });
 
     const data = await response.json();
+
+    if (!response.ok) {
+      console.error('Anthropic error:', JSON.stringify(data));
+      return res.status(500).json({ error: data.error?.message || 'Error de Anthropic' });
+    }
+
     return res.status(200).json({ respuesta: data.content[0].text });
 
   } catch (error) {
-    return res.status(500).json({ error: 'Error al conectar con la IA' });
+    console.error('Catch error:', error.message);
+    return res.status(500).json({ error: error.message });
   }
 }
